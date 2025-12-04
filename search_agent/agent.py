@@ -12,8 +12,9 @@ from google.adk.models.lite_llm import LiteLlm
 from .config import get_config, ConfigurationError
 from .wikipedia_agent import search_wikipedia
 from .summarizing_agent import summarize_content
+from .mcp_client import create_mcp_toolset
 
-
+# ... (existing imports)
 
 # Initialize configuration
 try:
@@ -47,23 +48,15 @@ except Exception as e:
     raise
 
 
-def get_current_time(city: str) -> Dict[str, str]:
-    """Returns the current time in a specified city.
-    
-    Args:
-        city: Name of the city to get the time for
-        
-    Returns:
-        Dictionary with status, city, and time information
-        
-    Note:
-        This is a placeholder implementation.
-    """
-    logger.debug("Getting current time for city: %s", city)
-    # TODO: Implement actual time lookup functionality
-    result = {"status": "success", "city": city, "time": "10:30 AM"}
-    logger.debug("Time lookup result: %s", result)
-    return result
+# Initialize MCP Toolset
+try:
+    mcp_toolset = create_mcp_toolset()
+    logger.info("MCP toolset initialized successfully")
+except Exception as e:
+    logger.error("Failed to initialize MCP toolset: %s", e)
+    # We might want to continue without MCP or raise, depending on requirements.
+    # For now, let's raise as it seems critical for this task.
+    raise
 
 
 # Initialize the root agent
@@ -74,7 +67,7 @@ try:
         name=config.agent_name,
         description=config.agent_description,
         instruction=config.agent_instruction,
-        tools=[get_current_time, search_wikipedia, summarize_content],
+        tools=[search_wikipedia, summarize_content, mcp_toolset],
     )
     logger.info("Agent '%s' initialized successfully", config.agent_name)
 except Exception as e:
