@@ -1,7 +1,4 @@
 """Wikipedia Search Agent - Provides Wikipedia search capabilities.
-
-This module implements a Wikipedia search agent that can answer user queries
-by searching Wikipedia and returning article summaries.
 """
 
 import logging

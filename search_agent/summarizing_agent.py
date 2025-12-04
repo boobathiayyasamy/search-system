@@ -1,7 +1,4 @@
 """Summarizing Agent - Provides content summarization capabilities.
-
-This module implements a summarizing agent that can take content (typically from
-Wikipedia searches) and format it into concise bullet points (3-5 bullets).
 """
 
 import logging

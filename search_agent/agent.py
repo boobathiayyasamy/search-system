@@ -1,7 +1,6 @@
-"""Search Agent - A helpful assistant powered by LLM.
+"""Search Agent - A helpful assistant.
 
-This module initializes and configures the search agent with proper
-configuration management and logging.
+This module initializes the search agent with proper.
 """
 
 import logging
@@ -35,6 +34,8 @@ logger = logging.getLogger(__name__)
 # Initialize the LLM model
 try:
     logger.info("Initializing LLM model: %s", config.model_name)
+    logger.debug("api_base: %s", config.api_base)
+    
     model = LiteLlm(
         model=config.model_name,
         api_key=config.openrouter_api_key,
@@ -56,8 +57,7 @@ def get_current_time(city: str) -> Dict[str, str]:
         Dictionary with status, city, and time information
         
     Note:
-        This is a placeholder implementation. In production, this should
-        integrate with a real time API or library.
+        This is a placeholder implementation.
     """
     logger.debug("Getting current time for city: %s", city)
     # TODO: Implement actual time lookup functionality
