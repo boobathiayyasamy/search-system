@@ -97,3 +97,75 @@ def summarize_content(content: str) -> Dict[str, str]:
             "status": "error",
             "error": f"An error occurred while summarizing: {str(e)}"
         }
+
+
+def regenerate_with_positive_tone(summary: str, original_content: str = "") -> Dict[str, str]:
+    """Regenerate summary with positive or neutral tone.
+    
+    This function takes a summary with negative sentiment and regenerates it
+    to have a positive or neutral tone while maintaining factual accuracy.
+    
+    Args:
+        summary: The negative sentiment summary to regenerate
+        original_content: Optional original content for additional context
+        
+    Returns:
+        Dictionary with status and regenerated summary or error message
+        
+    Example:
+        >>> summary = "• Python is a terrible language\\n• It has poor performance"
+        >>> result = regenerate_with_positive_tone(summary)
+        >>> print(result['status'])
+        'success'
+        >>> print(result['summary'])
+        '• Python is a versatile programming language\\n• It prioritizes readability...'
+    """
+    logger.info("Regenerating summary with positive/neutral tone (length: %d characters)", len(summary))
+    
+    try:
+        if not summary or not summary.strip():
+            logger.warning("Empty summary provided for regeneration")
+            return {
+                "status": "error",
+                "error": "No summary provided to regenerate"
+            }
+        
+        # Build regeneration prompt
+        prompt = f"""The following summary has negative sentiment. Please rewrite it to have a POSITIVE or NEUTRAL tone while maintaining factual accuracy.
+
+Original summary:
+{summary}
+"""
+        
+        if original_content:
+            prompt += f"""\nOriginal content for context:
+{original_content[:500]}...
+"""
+        
+        prompt += """
+Requirements:
+1. Rewrite into 3-5 concise bullet points
+2. Use positive or neutral language
+3. Maintain factual accuracy
+4. Keep the same general topics/themes
+5. Avoid negative, critical, or pessimistic phrasing
+
+Provide ONLY the regenerated bullet points, no explanations.
+"""
+        
+        # Use the summarizing agent to regenerate with positive tone
+        response = summarizing_agent.run(prompt)
+        
+        logger.info("Successfully regenerated summary with positive/neutral tone")
+        return {
+            "status": "success",
+            "summary": response.strip()
+        }
+        
+    except Exception as e:
+        logger.error("Error regenerating summary: %s", e)
+        return {
+            "status": "error",
+            "error": f"An error occurred while regenerating: {str(e)}"
+        }
+
