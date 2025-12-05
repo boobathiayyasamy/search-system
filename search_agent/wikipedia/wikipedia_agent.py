@@ -8,7 +8,7 @@ import wikipedia
 from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
 
-from .config import get_config, ConfigurationError
+from ..config import get_config, ConfigurationError
 
 
 # Initialize configuration

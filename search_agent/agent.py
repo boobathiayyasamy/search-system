@@ -10,9 +10,9 @@ from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
 
 from .config import get_config, ConfigurationError
-from .wikipedia_agent import search_wikipedia
-from .summarizing_agent import summarize_content
-from .mcp_client import create_mcp_toolset
+from .wikipedia import wikipedia_agent
+from .summarizing import summarizing_agent
+from .mcp import create_mcp_toolset
 
 # ... (existing imports)
 
@@ -67,7 +67,8 @@ try:
         name=config.agent_name,
         description=config.agent_description,
         instruction=config.agent_instruction,
-        tools=[search_wikipedia, summarize_content, mcp_toolset],
+        tools=[mcp_toolset],
+        sub_agents=[wikipedia_agent, summarizing_agent]
     )
     logger.info("Agent '%s' initialized successfully", config.agent_name)
 except Exception as e:
