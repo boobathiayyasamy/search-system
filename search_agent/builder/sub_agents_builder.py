@@ -14,13 +14,10 @@ def build_sub_agents() -> List[Agent]:
     """Build and return the list of sub-agents dynamically from registry."""
     
     try:
-        # Get the path to agents_registry.yaml
-        # It should be in the search_agent directory (parent of builder)
         builder_dir = Path(__file__).parent
         search_agent_dir = builder_dir.parent
         registry_path = search_agent_dir / "agents_registry.yaml"
         
-        # Initialize registry and load agents
         registry = AgentsRegistry(str(registry_path))
         sub_agents = registry.load_agents()
         

@@ -7,7 +7,6 @@ from google.adk.tools.mcp_tool.mcp_toolset import McpToolset, StdioConnectionPar
 
 logger = logging.getLogger(__name__)
 
-# MCP server configuration
 MCP_SERVER_COMMAND = "python"
 MCP_SERVER_ARGS = ["/Users/boobathi/master/studies/ai/responsive/util-mcp/time_server.py"]
 

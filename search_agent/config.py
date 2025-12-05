@@ -17,20 +17,17 @@ class Config:
     
     def __init__(self, config_file: Optional[str] = None):
         """Initialize configuration."""
-        # Load environment variables from .env file in the same directory as this module
         env_path = Path(__file__).parent / ".env"
         load_dotenv(dotenv_path=env_path)
         
-        # Set up config parser (use RawConfigParser to avoid interpolation issues)
+        # Use RawConfigParser to avoid interpolation issues
         self.config = configparser.RawConfigParser()
         
-        # Determine config file path
         if config_file is None:
             config_file = Path(__file__).parent / "config.ini"
         
         self.config_file = Path(config_file)
         
-        # Load config file if it exists
         if self.config_file.exists():
             self.config.read(self.config_file)
     
@@ -43,21 +40,17 @@ class Config:
         required: bool = False
     ) -> Optional[str]:
         """Get configuration value with fallback chain."""
-        # Priority 1: Environment variable
         if env_var:
             value = os.environ.get(env_var)
             if value:
                 return value
         
-        # Priority 2: Config file
         if self.config.has_option(section, key):
             return self.config.get(section, key)
         
-        # Priority 3: Default value
         if default is not None:
             return default
         
-        # If required and not found, raise error
         if required:
             raise ConfigurationError(
                 f"Required configuration not found: {section}.{key}"

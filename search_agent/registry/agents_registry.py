@@ -26,24 +26,19 @@ class AgentsRegistry:
     
     def load_agents(self, force_reload: bool = False) -> List[Agent]:
         """Load and return enabled agents in configured order."""
-        # Return cached agents if available and not forcing reload
         if self._loaded_agents is not None and not force_reload:
             return self._loaded_agents
         
-        # Parse configuration
         self._config = self.parser.parse()
         
-        # Get agent configurations
         agent_configs = self._config.get('agents', [])
         
-        # Filter enabled agents and sort by order
         enabled_configs = [
             config for config in agent_configs 
             if config.get('enabled', False)
         ]
         enabled_configs.sort(key=lambda x: x.get('order', 999))
         
-        # Load each enabled agent
         loaded_agents = []
         for config in enabled_configs:
             agent_name = config['name']
@@ -57,7 +52,6 @@ class AgentsRegistry:
                 logger.error(error_msg)
                 raise AgentLoadError(error_msg) from e
         
-        # Cache loaded agents
         self._loaded_agents = loaded_agents
         
         return loaded_agents

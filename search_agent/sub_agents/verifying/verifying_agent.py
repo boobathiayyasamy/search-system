@@ -8,19 +8,13 @@ from google.adk.models.lite_llm import LiteLlm
 
 from .config import get_verifying_config
 
-
-# Initialize configuration
 try:
     config = get_verifying_config()
 except Exception as e:
     raise RuntimeError(f"Failed to load verifying configuration: {e}") from e
 
-
-# Set up logging
 logger = logging.getLogger(__name__)
 
-
-# Initialize the LLM model for verifying agent
 try:
     verifying_model = LiteLlm(
         model=config.model_name,
@@ -31,8 +25,6 @@ except Exception as e:
     logger.error("Failed to initialize verifying agent model: %s", e)
     raise
 
-
-# Initialize the verifying agent without tools (sentiment analysis uses only LLM)
 try:
     verifying_agent = Agent(
         model=verifying_model,
@@ -56,7 +48,6 @@ def analyze_sentiment(summary: str, original_content: str = "") -> Dict[str, str
                 "error": "No summary provided to analyze"
             }
         
-        # Build sentiment analysis prompt
         prompt = f"""Analyze the sentiment of the following summary and classify it as POSITIVE, NEUTRAL, or NEGATIVE.
 
 Summary to analyze:
@@ -70,11 +61,9 @@ Instructions:
 Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
 """
         
-        # Use the verifying agent to analyze sentiment
         response = verifying_agent.run(prompt).strip().upper()
         
-        # Extract sentiment from response (handle cases where LLM adds extra text)
-        sentiment = "neutral"  # default
+        sentiment = "neutral"
         if "POSITIVE" in response:
             sentiment = "positive"
         elif "NEGATIVE" in response:
@@ -82,7 +71,6 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
         elif "NEUTRAL" in response:
             sentiment = "neutral"
         
-        # If sentiment is positive or neutral, return original content with sentiment info
         if sentiment in ["positive", "neutral"]:
             final_content = f"{summary}\n\nSentiment Analysis: {sentiment.upper()}"
             return {
@@ -92,7 +80,6 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
                 "regenerated": False
             }
         
-        # If sentiment is negative, trigger regeneration
         # Import summarizing agent here to avoid circular dependency
         try:
             from ..summarizing.summarizing_agent import regenerate_with_positive_tone
@@ -103,7 +90,6 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
                 "error": "Failed to trigger regeneration: summarizing agent not available"
             }
         
-        # Call summarizing agent to regenerate with positive/neutral tone
         regeneration_result = regenerate_with_positive_tone(summary, original_content)
         
         if regeneration_result["status"] == "error":

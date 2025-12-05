@@ -8,19 +8,13 @@ from google.adk.models.lite_llm import LiteLlm
 
 from .config import get_summarizing_config
 
-
-# Initialize configuration
 try:
     config = get_summarizing_config()
 except Exception as e:
     raise RuntimeError(f"Failed to load summarizing configuration: {e}") from e
 
-
-# Set up logging
 logger = logging.getLogger(__name__)
 
-
-# Initialize the LLM model for summarizing agent
 try:
     summarizing_model = LiteLlm(
         model=config.model_name,
@@ -31,8 +25,6 @@ except Exception as e:
     logger.error("Failed to initialize summarizing agent model: %s", e)
     raise
 
-
-# Initialize the summarizing agent (without tools, it will just use the LLM)
 try:
     summarizing_agent = Agent(
         model=summarizing_model,
@@ -57,7 +49,6 @@ def summarize_content(content: str) -> Dict[str, str]:
                 "error": "No content provided to summarize"
             }
         
-        # Use the summarizing agent to generate bullet points
         prompt = f"""Please summarize the following content into 3-5 concise bullet points:
 
 {content}"""
@@ -87,7 +78,6 @@ def regenerate_with_positive_tone(summary: str, original_content: str = "") -> D
                 "error": "No summary provided to regenerate"
             }
         
-        # Build regeneration prompt
         prompt = f"""The following summary has negative sentiment. Please rewrite it to have a POSITIVE or NEUTRAL tone while maintaining factual accuracy.
 
 Original summary:
@@ -110,7 +100,6 @@ Requirements:
 Provide ONLY the regenerated bullet points, no explanations.
 """
         
-        # Use the summarizing agent to regenerate with positive tone
         response = summarizing_agent.run(prompt)
         
         return {

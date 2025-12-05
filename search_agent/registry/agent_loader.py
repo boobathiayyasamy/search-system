@@ -19,7 +19,6 @@ class AgentLoader:
         """Dynamically import and return an agent from a module."""
         
         try:
-            # Dynamically import the module
             module = importlib.import_module(module_path)
         except ImportError as e:
             raise AgentNotFoundError(
@@ -30,7 +29,6 @@ class AgentLoader:
                 f"Error importing module '{module_path}' for agent '{agent_name}': {e}"
             )
         
-        # Try to find the agent instance in the module
         agent = AgentLoader.discover_agent(module, agent_name, module_path)
         
         return agent
@@ -38,13 +36,11 @@ class AgentLoader:
     @staticmethod
     def discover_agent(module: Any, agent_name: str, module_path: str) -> Agent:
         """Find and return the agent instance from a module."""
-        # Strategy 1: Try exact name match
         if hasattr(module, agent_name):
             candidate = getattr(module, agent_name)
             if isinstance(candidate, Agent):
                 return candidate
         
-        # Strategy 2: Look for attributes ending with '_agent'
         agent_candidates = []
         for attr_name in dir(module):
             if attr_name.endswith('_agent') and not attr_name.startswith('_'):
@@ -56,26 +52,22 @@ class AgentLoader:
             attr_name, agent = agent_candidates[0]
             return agent
         elif len(agent_candidates) > 1:
-            # Multiple agent instances found - try to match by name
             for attr_name, agent in agent_candidates:
                 if attr_name == agent_name or agent.name == agent_name:
                     return agent
             
-            # If still ambiguous, raise error
             names = [name for name, _ in agent_candidates]
             raise AgentLoadError(
                 f"Multiple agent instances found in '{module_path}': {names}. "
                 f"Cannot determine which one to use for '{agent_name}'"
             )
         
-        # Strategy 3: Look for any Agent instance
         for attr_name in dir(module):
             if not attr_name.startswith('_'):
                 candidate = getattr(module, attr_name)
                 if isinstance(candidate, Agent):
                     return candidate
         
-        # No agent found
         raise AgentLoadError(
             f"No Agent instance found in module '{module_path}' for agent '{agent_name}'. "
             f"The module must export an Agent instance."
