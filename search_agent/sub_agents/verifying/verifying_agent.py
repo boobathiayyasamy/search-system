@@ -77,7 +77,6 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
             "status": "success",
             "sentiment": sentiment,
             "content": final_content,
-            "regenerated": False
         }
         
     except Exception as e:

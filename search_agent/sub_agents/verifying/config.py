@@ -133,7 +133,7 @@ class VerifyingConfig:
         return self._get_value(
             "agent",
             "instruction",
-            default="Analyze the sentiment of the provided summary and classify it as POSITIVE, NEUTRAL, or NEGATIVE. If negative sentiment is detected, trigger the summarizing agent to regenerate the content with a positive or neutral tone."
+            default="Analyze the sentiment of the provided summary and classify it as POSITIVE, NEUTRAL, or NEGATIVE."
         )
     
     @property
