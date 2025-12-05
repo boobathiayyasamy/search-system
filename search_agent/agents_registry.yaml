@@ -1,0 +1,15 @@
+# Sub-Agents Registry
+# Defines which agents to register and in what order
+
+version: "1.0"
+
+agents:
+  - name: wikipedia_agent
+    module: search_agent.sub_agents.wikipedia.wikipedia_agent
+    enabled: true
+    order: 1
+    
+  - name: summarizing_agent
+    module: search_agent.sub_agents.summarizing.summarizing_agent
+    enabled: true
+    order: 2
