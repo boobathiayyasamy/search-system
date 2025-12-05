@@ -12,6 +12,7 @@ from google.adk.models.lite_llm import LiteLlm
 from .config import get_config, ConfigurationError
 from .sub_agents import wikipedia_agent, summarizing_agent
 from .tools.mcp import create_mcp_toolset
+from builder.root_agent_builder import build_root_agent
 
 
 # ... (existing imports)
@@ -59,19 +60,11 @@ except Exception as e:
     raise
 
 
-# Initialize the root agent
-try:
-    logger.info("Initializing agent: %s", config.agent_name)
-    root_agent = Agent(
-        model=model,
-        name=config.agent_name,
-        description=config.agent_description,
-        instruction=config.agent_instruction,
-        tools=[mcp_toolset],
-        sub_agents=[wikipedia_agent, summarizing_agent]
-    )
-    logger.info("Agent '%s' initialized successfully", config.agent_name)
-except Exception as e:
-    logger.error("Failed to initialize agent: %s", e)
-    raise
+# Initialize the root agent using builder
+root_agent = build_root_agent(
+    model=model,
+    config=config,
+    mcp_toolset=mcp_toolset,
+    sub_agents=[wikipedia_agent, summarizing_agent]
+)
 
