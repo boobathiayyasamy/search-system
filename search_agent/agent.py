@@ -10,8 +10,7 @@ from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
 
 from .config import get_config, ConfigurationError
-from .wikipedia import wikipedia_agent
-from .summarizing import summarizing_agent
+from .sub_agents import wikipedia_agent, summarizing_agent
 from .mcp import create_mcp_toolset
 
 # ... (existing imports)
