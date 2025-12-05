@@ -1,7 +1,4 @@
-"""Sub-agents Builder - Builds and returns sub-agents for the root agent.
-
-This module dynamically loads sub-agents based on the agents_registry.yaml configuration.
-"""
+"""Sub-agents Builder."""
 
 import logging
 from pathlib import Path
@@ -14,23 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 def build_sub_agents() -> List[Agent]:
-    """Build and return the list of sub-agents dynamically from registry.
-    
-    The agents are loaded based on the configuration in agents_registry.yaml.
-    Only enabled agents will be loaded, in the order specified by the 'order' field.
-    
-    Returns:
-        List[Agent]: List of dynamically loaded enabled agents
-        
-    Raises:
-        ConfigurationError: If the registry configuration is invalid
-        AgentLoadError: If an agent fails to load
-        
-    Note:
-        The agents are loaded from modules specified in:
-        search_agent/agents_registry.yaml
-    """
-    logger.info("Building sub-agents list from registry")
+    """Build and return the list of sub-agents dynamically from registry."""
     
     try:
         # Get the path to agents_registry.yaml
@@ -39,15 +20,9 @@ def build_sub_agents() -> List[Agent]:
         search_agent_dir = builder_dir.parent
         registry_path = search_agent_dir / "agents_registry.yaml"
         
-        logger.debug("Registry path: %s", registry_path)
-        
         # Initialize registry and load agents
         registry = AgentsRegistry(str(registry_path))
         sub_agents = registry.load_agents()
-        
-        logger.info("Sub-agents list built with %d agents: %s", 
-                    len(sub_agents), 
-                    [agent.name for agent in sub_agents])
         
         return sub_agents
         

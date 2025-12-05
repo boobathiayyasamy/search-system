@@ -1,8 +1,4 @@
-"""Configuration management for the search agent.
-
-This module provides configuration management using Python's configparser
-with fallback to environment variables for sensitive data.
-"""
+"""Configuration management for the search agent."""
 
 import os
 import configparser
@@ -17,21 +13,10 @@ class ConfigurationError(Exception):
 
 
 class Config:
-    """Configuration manager for the search agent.
-    
-    Configuration priority (highest to lowest):
-    1. Environment variables
-    2. Configuration file values
-    3. Default values
-    """
+    """Configuration manager for the search agent."""
     
     def __init__(self, config_file: Optional[str] = None):
-        """Initialize configuration.
-        
-        Args:
-            config_file: Path to configuration file. If None, looks for config.ini
-                        in the same directory as this module.
-        """
+        """Initialize configuration."""
         # Load environment variables from .env file in the same directory as this module
         env_path = Path(__file__).parent / ".env"
         load_dotenv(dotenv_path=env_path)
@@ -57,21 +42,7 @@ class Config:
         default: Optional[str] = None,
         required: bool = False
     ) -> Optional[str]:
-        """Get configuration value with fallback chain.
-        
-        Args:
-            section: Config file section name
-            key: Config file key name
-            env_var: Environment variable name to check first
-            default: Default value if not found elsewhere
-            required: If True, raises ConfigurationError if value not found
-            
-        Returns:
-            Configuration value or None
-            
-        Raises:
-            ConfigurationError: If required=True and value not found
-        """
+        """Get configuration value with fallback chain."""
         # Priority 1: Environment variable
         if env_var:
             value = os.environ.get(env_var)
@@ -95,10 +66,9 @@ class Config:
         
         return None
     
-    # API Configuration
     @property
     def openrouter_api_key(self) -> str:
-        """OpenRouter API key (from environment variable)."""
+        """OpenRouter API key."""
         value = self._get_value(
             "api", 
             "openrouter_api_key",
@@ -127,7 +97,6 @@ class Config:
             default="openrouter/x-ai/grok-4.1-fast:free"
         )
     
-    # Agent Configuration
     @property
     def agent_name(self) -> str:
         """Agent name."""
@@ -155,7 +124,6 @@ class Config:
             default="Answer user questions to the best of your knowledge"
         )
     
-    # Logging Configuration
     @property
     def log_level(self) -> str:
         """Logging level."""

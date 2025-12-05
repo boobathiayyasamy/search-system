@@ -1,5 +1,4 @@
-"""Verifying Agent - Provides sentiment analysis capabilities for summarized content.
-"""
+"""Verifying Agent."""
 
 import logging
 from typing import Dict
@@ -23,13 +22,11 @@ logger = logging.getLogger(__name__)
 
 # Initialize the LLM model for verifying agent
 try:
-    logger.info("Initializing verifying agent model")
     verifying_model = LiteLlm(
         model=config.model_name,
         api_key=config.api_key,
         api_base=config.api_base
     )
-    logger.info("Verifying agent model initialized successfully")
 except Exception as e:
     logger.error("Failed to initialize verifying agent model: %s", e)
     raise
@@ -37,7 +34,6 @@ except Exception as e:
 
 # Initialize the verifying agent without tools (sentiment analysis uses only LLM)
 try:
-    logger.info("Initializing verifying agent")
     verifying_agent = Agent(
         model=verifying_model,
         name=config.agent_name,
@@ -45,44 +41,16 @@ try:
         instruction=config.agent_instruction,
         tools=[],
     )
-    logger.info("Verifying agent initialized successfully")
 except Exception as e:
     logger.error("Failed to initialize verifying agent: %s", e)
     raise
 
 
 def analyze_sentiment(summary: str, original_content: str = "") -> Dict[str, str]:
-    """Analyze the sentiment of summarized content.
-    
-    This function analyzes the sentiment of a summary and classifies it as
-    positive, neutral, or negative. If the sentiment is negative, it triggers
-    the summarizing agent to regenerate the content with a positive or neutral tone.
-    
-    Args:
-        summary: The summary to analyze (typically bullet points)
-        original_content: Optional original content for context in regeneration
-        
-    Returns:
-        Dictionary with status, sentiment classification, and final content
-        Keys:
-        - status: 'success' or 'error'
-        - sentiment: 'positive', 'neutral', or 'negative'
-        - content: The final content (original if positive/neutral, regenerated if negative)
-        - regenerated: Boolean indicating if content was regenerated
-        
-    Example:
-        >>> summary = "• Python is a terrible language\\n• It has poor performance"
-        >>> result = analyze_sentiment(summary, "original content...")
-        >>> print(result['sentiment'])
-        'negative'
-        >>> print(result['regenerated'])
-        True
-    """
-    logger.info("Analyzing sentiment of summary (length: %d characters)", len(summary))
+    """Analyze the sentiment of summarized content."""
     
     try:
         if not summary or not summary.strip():
-            logger.warning("Empty summary provided for sentiment analysis")
             return {
                 "status": "error",
                 "error": "No summary provided to analyze"
@@ -114,11 +82,8 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
         elif "NEUTRAL" in response:
             sentiment = "neutral"
         
-        logger.info("Detected sentiment: %s", sentiment)
-        
         # If sentiment is positive or neutral, return original content with sentiment info
         if sentiment in ["positive", "neutral"]:
-            logger.info("Sentiment is %s, returning original content", sentiment)
             final_content = f"{summary}\n\nSentiment Analysis: {sentiment.upper()}"
             return {
                 "status": "success",
@@ -128,8 +93,6 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
             }
         
         # If sentiment is negative, trigger regeneration
-        logger.info("Sentiment is negative, triggering regeneration")
-        
         # Import summarizing agent here to avoid circular dependency
         try:
             from ..summarizing.summarizing_agent import regenerate_with_positive_tone
@@ -150,7 +113,6 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
                 "error": f"Regeneration failed: {regeneration_result.get('error')}"
             }
         
-        logger.info("Successfully regenerated content with positive/neutral tone")
         final_content = f"{regeneration_result['summary']}\n\nSentiment Analysis: NEGATIVE (Regenerated to NEUTRAL/POSITIVE)"
         return {
             "status": "success",

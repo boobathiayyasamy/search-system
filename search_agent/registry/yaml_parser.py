@@ -1,4 +1,4 @@
-"""YAML configuration parser and validator for agents registry."""
+"""YAML configuration parser."""
 
 import logging
 from pathlib import Path
@@ -17,25 +17,13 @@ class YAMLParser:
     REQUIRED_FIELDS = {'name', 'module', 'enabled', 'order'}
     
     def __init__(self, config_path: str):
-        """Initialize the YAML parser.
-        
-        Args:
-            config_path: Path to the YAML configuration file
-        """
+        """Initialize the YAML parser."""
         self.config_path = Path(config_path)
         if not self.config_path.exists():
             raise ConfigurationError(f"Configuration file not found: {config_path}")
     
     def parse(self) -> Dict[str, Any]:
-        """Parse and validate the YAML configuration file.
-        
-        Returns:
-            Dictionary containing the parsed configuration
-            
-        Raises:
-            ConfigurationError: If the YAML is invalid or doesn't meet schema requirements
-        """
-        logger.info("Parsing configuration file: %s", self.config_path)
+        """Parse and validate the YAML configuration file."""
         
         try:
             with open(self.config_path, 'r') as f:
@@ -49,19 +37,11 @@ class YAMLParser:
             raise ConfigurationError("Configuration file is empty")
         
         self.validate_config(config)
-        logger.info("Configuration parsed and validated successfully")
         
         return config
     
     def validate_config(self, config: Dict[str, Any]) -> None:
-        """Validate the configuration structure and required fields.
-        
-        Args:
-            config: The parsed configuration dictionary
-            
-        Raises:
-            ConfigurationError: If validation fails
-        """
+        """Validate the configuration structure and required fields."""
         # Check for agents list
         if 'agents' not in config:
             raise ConfigurationError("Configuration must contain 'agents' key")
@@ -71,7 +51,6 @@ class YAMLParser:
             raise ConfigurationError("'agents' must be a list")
         
         if not agents:
-            logger.warning("No agents defined in configuration")
             return
         
         # Validate each agent configuration
@@ -105,5 +84,3 @@ class YAMLParser:
                 raise ConfigurationError(
                     f"Agent '{agent['name']}' order must be an integer, got: {type(agent['order'])}"
                 )
-        
-        logger.debug("All %d agents validated successfully", len(agents))

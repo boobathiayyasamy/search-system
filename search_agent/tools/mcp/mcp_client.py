@@ -1,8 +1,4 @@
-"""MCP Client - Communicates with MCP server using Google ADK.
-
-This module provides functionality to communicate with an MCP server
-using the Google ADK MCP toolset.
-"""
+"""MCP Client."""
 
 import logging
 from typing import Optional
@@ -17,12 +13,7 @@ MCP_SERVER_ARGS = ["/Users/boobathi/master/studies/ai/responsive/util-mcp/time_s
 
 
 def create_mcp_toolset() -> McpToolset:
-    """Create and configure the MCP toolset.
-    
-    Returns:
-        Configured McpToolset instance ready to be used with an Agent.
-    """
-    logger.info("Creating MCP toolset for server: %s %s", MCP_SERVER_COMMAND, MCP_SERVER_ARGS)
+    """Create and configure the MCP toolset."""
     
     server_params = StdioServerParameters(
         command=MCP_SERVER_COMMAND,

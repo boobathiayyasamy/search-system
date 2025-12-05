@@ -1,7 +1,4 @@
-"""Search Agent - A helpful assistant.
-
-This module initializes the search agent with proper.
-"""
+"""Search Agent - A helpful assistant."""
 
 import logging
 from pathlib import Path
@@ -38,7 +35,6 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-logger.info(f"Logging initialized. Log file: {log_filename}")
 
 # Now import other modules (after logging is configured)
 from typing import Dict
@@ -51,15 +47,11 @@ from .builder.sub_agents_builder import build_sub_agents
 
 # Initialize the LLM model
 try:
-    logger.info("Initializing LLM model: %s", config.model_name)
-    logger.debug("api_base: %s", config.api_base)
-    
     model = LiteLlm(
         model=config.model_name,
         api_key=config.openrouter_api_key,
         api_base=config.api_base
     )
-    logger.info("LLM model initialized successfully")
 except Exception as e:
     logger.error("Failed to initialize LLM model: %s", e)
     raise
@@ -68,7 +60,6 @@ except Exception as e:
 # Initialize MCP Toolset
 try:
     mcp_toolset = create_mcp_toolset()
-    logger.info("MCP toolset initialized successfully")
 except Exception as e:
     logger.error("Failed to initialize MCP toolset: %s", e)
     # We might want to continue without MCP or raise, depending on requirements.
