@@ -116,13 +116,14 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
         
         logger.info("Detected sentiment: %s", sentiment)
         
-        # If sentiment is positive or neutral, return original content
+        # If sentiment is positive or neutral, return original content with sentiment info
         if sentiment in ["positive", "neutral"]:
             logger.info("Sentiment is %s, returning original content", sentiment)
+            final_content = f"{summary}\n\nSentiment Analysis: {sentiment.upper()}"
             return {
                 "status": "success",
                 "sentiment": sentiment,
-                "content": summary,
+                "content": final_content,
                 "regenerated": False
             }
         
@@ -150,10 +151,11 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
             }
         
         logger.info("Successfully regenerated content with positive/neutral tone")
+        final_content = f"{regeneration_result['summary']}\n\nSentiment Analysis: NEGATIVE (Regenerated to NEUTRAL/POSITIVE)"
         return {
             "status": "success",
             "sentiment": "negative",
-            "content": regeneration_result["summary"],
+            "content": final_content,
             "regenerated": True,
             "original_content": summary
         }
