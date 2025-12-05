@@ -71,41 +71,13 @@ Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
         elif "NEUTRAL" in response:
             sentiment = "neutral"
         
-        if sentiment in ["positive", "neutral"]:
-            final_content = f"{summary}\n\nSentiment Analysis: {sentiment.upper()}"
-            return {
-                "status": "success",
-                "sentiment": sentiment,
-                "content": final_content,
-                "regenerated": False
-            }
-        
-        # Import summarizing agent here to avoid circular dependency
-        try:
-            from ..summarizing.summarizing_agent import regenerate_with_positive_tone
-        except ImportError as e:
-            logger.error("Failed to import regenerate_with_positive_tone: %s", e)
-            return {
-                "status": "error",
-                "error": "Failed to trigger regeneration: summarizing agent not available"
-            }
-        
-        regeneration_result = regenerate_with_positive_tone(summary, original_content)
-        
-        if regeneration_result["status"] == "error":
-            logger.error("Regeneration failed: %s", regeneration_result.get("error"))
-            return {
-                "status": "error",
-                "error": f"Regeneration failed: {regeneration_result.get('error')}"
-            }
-        
-        final_content = f"{regeneration_result['summary']}\n\nSentiment Analysis: NEGATIVE (Regenerated to NEUTRAL/POSITIVE)"
+        # Return sentiment analysis for all sentiment types
+        final_content = f"{summary}\n\nSentiment Analysis: {sentiment.upper()}"
         return {
             "status": "success",
-            "sentiment": "negative",
+            "sentiment": sentiment,
             "content": final_content,
-            "regenerated": True,
-            "original_content": summary
+            "regenerated": False
         }
         
     except Exception as e:
