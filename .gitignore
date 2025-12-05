@@ -11,3 +11,7 @@ wheels/
 
 # Sensitive data
 search_agent/.env
+
+# Log files
+logs/
+*.log

@@ -16,5 +16,5 @@ agents:
     
   - name: verifying_agent
     module: search_agent.sub_agents.verifying.verifying_agent
-    enabled: true
+    enabled: false
     order: 3
