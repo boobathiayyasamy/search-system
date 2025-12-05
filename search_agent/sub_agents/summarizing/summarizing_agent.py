@@ -7,14 +7,14 @@ from typing import Dict
 from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
 
-from ...config import get_config, ConfigurationError
+from .config import get_summarizing_config
 
 
 # Initialize configuration
 try:
-    config = get_config()
-except ConfigurationError as e:
-    raise RuntimeError(f"Failed to load configuration: {e}") from e
+    config = get_summarizing_config()
+except Exception as e:
+    raise RuntimeError(f"Failed to load summarizing configuration: {e}") from e
 
 
 # Set up logging
@@ -26,7 +26,7 @@ try:
     logger.info("Initializing summarizing agent model")
     summarizing_model = LiteLlm(
         model=config.model_name,
-        api_key=config.openrouter_api_key,
+        api_key=config.api_key,
         api_base=config.api_base
     )
     logger.info("Summarizing agent model initialized successfully")
@@ -40,15 +40,16 @@ try:
     logger.info("Initializing summarizing agent")
     summarizing_agent = Agent(
         model=summarizing_model,
-        name="summarizing_agent",
-        description="An agent that summarizes content into 3-5 concise bullet points.",
-        instruction="Take the provided content and create a clear, concise summary with 3-5 bullet points. Each bullet should capture a key piece of information. Use the '•' character for bullets. Provide ONLY the bullet points, nothing else.",
+        name=config.agent_name,
+        description=config.agent_description,
+        instruction=config.agent_instruction,
         tools=[],
     )
     logger.info("Summarizing agent initialized successfully")
 except Exception as e:
     logger.error("Failed to initialize summarizing agent: %s", e)
     raise
+
 
 
 def summarize_content(content: str) -> Dict[str, str]:
