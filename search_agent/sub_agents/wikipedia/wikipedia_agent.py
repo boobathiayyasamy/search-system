@@ -8,14 +8,7 @@ import wikipedia
 from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
 
-from ...config import get_config, ConfigurationError
-
-
-# Initialize configuration
-try:
-    config = get_config()
-except ConfigurationError as e:
-    raise RuntimeError(f"Failed to load configuration: {e}") from e
+from .config import get_wikipedia_config
 
 
 # Set up logging
@@ -82,10 +75,11 @@ def search_wikipedia(query: str) -> Dict[str, str]:
 # Initialize the LLM model for Wikipedia agent
 try:
     logger.info("Initializing Wikipedia agent model")
+    wiki_config = get_wikipedia_config()
     wikipedia_model = LiteLlm(
-        model=config.model_name,
-        api_key=config.openrouter_api_key,
-        api_base=config.api_base
+        model=wiki_config.model_name,
+        api_key=wiki_config.api_key,
+        api_base=wiki_config.api_base
     )
     logger.info("Wikipedia agent model initialized successfully")
 except Exception as e:
@@ -98,9 +92,9 @@ try:
     logger.info("Initializing Wikipedia agent")
     wikipedia_agent = Agent(
         model=wikipedia_model,
-        name="wikipedia_agent",
-        description="An agent that searches Wikipedia to answer questions about various topics.",
-        instruction="Search Wikipedia to find accurate and relevant information to answer user questions. Provide concise summaries from Wikipedia articles.",
+        name=wiki_config.agent_name,
+        description=wiki_config.agent_description,
+        instruction=wiki_config.agent_instruction,
         tools=[search_wikipedia],
     )
     logger.info("Wikipedia agent initialized successfully")
