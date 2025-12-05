@@ -28,7 +28,7 @@ except Exception as e:
     raise
 
 try:
-    mcp_toolset = create_mcp_toolset()
+    time_tool = create_mcp_toolset()
 except Exception as e:
     logger.error("Failed to initialize MCP toolset: %s", e)
     raise
@@ -36,7 +36,7 @@ except Exception as e:
 root_agent = build_root_agent(
     model=model,
     config=config,
-    mcp_toolset=mcp_toolset,
+    tool=time_tool,
     sub_agents=build_sub_agents()
 )
 

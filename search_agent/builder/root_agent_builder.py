@@ -9,7 +9,7 @@ from google.adk.models.lite_llm import LiteLlm
 logger = logging.getLogger(__name__)
 
 
-def build_root_agent(model, config, mcp_toolset, sub_agents):
+def build_root_agent(model, config, tool, sub_agents):
     """Build and return the root agent."""
     try:
         root_agent = Agent(
@@ -17,7 +17,7 @@ def build_root_agent(model, config, mcp_toolset, sub_agents):
             name=config.agent_name,
             description=config.agent_description,
             instruction=config.agent_instruction,
-            tools=[mcp_toolset],
+            tools=[tool],
             sub_agents=sub_agents
         )
         return root_agent
