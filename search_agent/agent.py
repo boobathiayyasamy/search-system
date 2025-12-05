@@ -10,9 +10,9 @@ from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
 
 from .config import get_config, ConfigurationError
-from .sub_agents import wikipedia_agent, summarizing_agent
 from .tools.mcp import create_mcp_toolset
 from builder.root_agent_builder import build_root_agent
+from builder.sub_agents_builder import build_sub_agents
 
 
 # ... (existing imports)
@@ -65,6 +65,6 @@ root_agent = build_root_agent(
     model=model,
     config=config,
     mcp_toolset=mcp_toolset,
-    sub_agents=[wikipedia_agent, summarizing_agent]
+    sub_agents=build_sub_agents()
 )
 
