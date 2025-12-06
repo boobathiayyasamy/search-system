@@ -45,7 +45,7 @@ class ToolLoader:
         try:
             # Call the function to get the actual tool/toolset
             tool = tool_function()
-            logger.info("Successfully loaded tool from %s.%s", module_path, function_name)
+            logger.info(f"Loaded tool '{function_name}' from module '{module_path}'")
             return tool
         except Exception as e:
             raise ToolLoadError(

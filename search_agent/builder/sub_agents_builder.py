@@ -20,6 +20,7 @@ def build_sub_agents() -> List[Agent]:
         
         registry = AgentsRegistry(str(registry_path))
         sub_agents = registry.load_agents()
+        logger.info(f"Loaded {len(sub_agents)} sub-agent(s) from registry")
         
         return sub_agents
         

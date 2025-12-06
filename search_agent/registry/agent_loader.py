@@ -30,6 +30,7 @@ class AgentLoader:
             )
         
         agent = AgentLoader.discover_agent(module, agent_name, module_path)
+        logger.info(f"Loaded agent '{agent_name}' from module '{module_path}'")
         
         return agent
     

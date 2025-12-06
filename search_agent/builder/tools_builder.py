@@ -18,8 +18,8 @@ def build_tools() -> List[Any]:
         # Load tools from registry
         tools_registry = ToolsRegistry(str(registry_path))
         tools = tools_registry.load_tools()
+        logger.info(f"Loaded {len(tools)} tool(s) from registry")
         
-        logger.info("Successfully loaded %d tools from registry", len(tools))
         return tools
     except Exception as e:
         logger.error("Failed to initialize tools: %s", e)

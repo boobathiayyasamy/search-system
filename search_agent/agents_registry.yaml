@@ -12,9 +12,9 @@ agents:
   - name: summarizing_agent
     module: search_agent.sub_agents.summarizing.summarizing_agent
     enabled: true
-    order: 2
+    order: 3
     
   - name: verifying_agent
     module: search_agent.sub_agents.verifying.verifying_agent
     enabled: true
-    order: 3
+    order: 2
