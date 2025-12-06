@@ -38,5 +38,52 @@ class YAMLParser:
         if not isinstance(config['agents'], list):
             raise ConfigurationError("'agents' must be a list")
         
+        self._validate_agents(config['agents'])
+        
         return config
+    
+    def _validate_agents(self, agents: list) -> None:
+        """Validate agents configuration for duplicates."""
+        self._validate_duplicate_name_module(agents)
+        self._validate_duplicate_order(agents)
+    
+    def _validate_duplicate_name_module(self, agents: list) -> None:
+        """Check for duplicate agent name and module combinations."""
+        seen = {}
+        for idx, agent in enumerate(agents):
+            name = agent.get('name')
+            module = agent.get('module')
+            
+            if not name or not module:
+                continue
+            
+            key = (name, module)
+            if key in seen:
+                raise ConfigurationError(
+                    f"Duplicate agent configuration found: agent '{name}' "
+                    f"with module '{module}' is defined at positions {seen[key]} and {idx}"
+                )
+            seen[key] = idx
+    
+    def _validate_duplicate_order(self, agents: list) -> None:
+        """Check for duplicate order values among enabled agents."""
+        enabled_agents = [
+            agent for agent in agents 
+            if agent.get('enabled', False)
+        ]
+        
+        order_map = {}
+        for agent in enabled_agents:
+            order = agent.get('order')
+            name = agent.get('name', 'unknown')
+            
+            if order is None:
+                continue
+            
+            if order in order_map:
+                raise ConfigurationError(
+                    f"Duplicate order value {order} found for enabled agents: "
+                    f"'{order_map[order]}' and '{name}'"
+                )
+            order_map[order] = name
 

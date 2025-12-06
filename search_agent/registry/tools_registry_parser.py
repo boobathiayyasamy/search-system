@@ -38,4 +38,51 @@ class ToolsYAMLParser:
         if not isinstance(config['tools'], list):
             raise ConfigurationError("'tools' must be a list")
         
+        self._validate_tools(config['tools'])
+        
         return config
+    
+    def _validate_tools(self, tools: list) -> None:
+        """Validate tools configuration for duplicates."""
+        self._validate_duplicate_name_module(tools)
+        self._validate_duplicate_order(tools)
+    
+    def _validate_duplicate_name_module(self, tools: list) -> None:
+        """Check for duplicate tool name and module combinations."""
+        seen = {}
+        for idx, tool in enumerate(tools):
+            name = tool.get('name')
+            module = tool.get('module')
+            
+            if not name or not module:
+                continue
+            
+            key = (name, module)
+            if key in seen:
+                raise ConfigurationError(
+                    f"Duplicate tool configuration found: tool '{name}' "
+                    f"with module '{module}' is defined at positions {seen[key]} and {idx}"
+                )
+            seen[key] = idx
+    
+    def _validate_duplicate_order(self, tools: list) -> None:
+        """Check for duplicate order values among enabled tools."""
+        enabled_tools = [
+            tool for tool in tools 
+            if tool.get('enabled', False)
+        ]
+        
+        order_map = {}
+        for tool in enabled_tools:
+            order = tool.get('order')
+            name = tool.get('name', 'unknown')
+            
+            if order is None:
+                continue
+            
+            if order in order_map:
+                raise ConfigurationError(
+                    f"Duplicate order value {order} found for enabled tools: "
+                    f"'{order_map[order]}' and '{name}'"
+                )
+            order_map[order] = name
