@@ -13,7 +13,6 @@ logger = setup_logging(config)
 from typing import Dict
 from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
-from .tools.mcp import create_mcp_toolset
 from .builder.root_agent_builder import build_root_agent
 
 try:
@@ -26,15 +25,8 @@ except Exception as e:
     logger.error("Failed to initialize LLM model: %s", e)
     raise
 
-try:
-    time_tool = create_mcp_toolset()
-except Exception as e:
-    logger.error("Failed to initialize MCP toolset: %s", e)
-    raise
-
 root_agent = build_root_agent(
     model=model,
-    config=config,
-    tool=time_tool
+    config=config
 )
 
