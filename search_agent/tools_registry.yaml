@@ -7,5 +7,5 @@ tools:
   - name: time_tool
     module: search_agent.tools.mcp
     function: create_mcp_toolset
-    enabled: false
+    enabled: true
     order: 1

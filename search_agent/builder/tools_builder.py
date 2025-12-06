@@ -9,8 +9,8 @@ from ..registry import ToolsRegistry
 logger = logging.getLogger(__name__)
 
 
-def build_root_tools() -> List[Any]:
-    """Build and return the root agent tools."""
+def build_tools() -> List[Any]:
+    """Build and return the agent tools."""
     try:
         # Get the path to tools_registry.yaml
         registry_path = Path(__file__).parent.parent / "tools_registry.yaml"
@@ -22,5 +22,5 @@ def build_root_tools() -> List[Any]:
         logger.info("Successfully loaded %d tools from registry", len(tools))
         return tools
     except Exception as e:
-        logger.error("Failed to initialize root tools: %s", e)
+        logger.error("Failed to initialize tools: %s", e)
         raise

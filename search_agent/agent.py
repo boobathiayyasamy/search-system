@@ -13,7 +13,7 @@ logger = setup_logging(config)
 from typing import Dict
 from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
-from .builder.root_agent_builder import build_root_agent
+from .builder.agent_builder import build_agent
 
 try:
     model = LiteLlm(
@@ -25,7 +25,7 @@ except Exception as e:
     logger.error("Failed to initialize LLM model: %s", e)
     raise
 
-root_agent = build_root_agent(
+root_agent = build_agent(
     model=model,
     config=config
 )
