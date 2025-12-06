@@ -19,3 +19,8 @@ class AgentLoadError(RegistryError):
 class AgentNotFoundError(RegistryError):
     """Raised when an agent module or instance cannot be found."""
     pass
+
+
+class ToolLoadError(RegistryError):
+    """Raised when a tool fails to load from its module."""
+    pass

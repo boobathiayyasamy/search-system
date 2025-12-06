@@ -1,16 +1,26 @@
 """Root Tools Builder."""
 
 import logging
-from ..tools.mcp import create_mcp_toolset
+from pathlib import Path
+from typing import List, Any
+
+from ..registry import ToolsRegistry
 
 logger = logging.getLogger(__name__)
 
 
-def build_root_tools():
+def build_root_tools() -> List[Any]:
     """Build and return the root agent tools."""
     try:
-        time_tool = create_mcp_toolset()
-        return [time_tool]
+        # Get the path to tools_registry.yaml
+        registry_path = Path(__file__).parent.parent / "tools_registry.yaml"
+        
+        # Load tools from registry
+        tools_registry = ToolsRegistry(str(registry_path))
+        tools = tools_registry.load_tools()
+        
+        logger.info("Successfully loaded %d tools from registry", len(tools))
+        return tools
     except Exception as e:
         logger.error("Failed to initialize root tools: %s", e)
         raise
