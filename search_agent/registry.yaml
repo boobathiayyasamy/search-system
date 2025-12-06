@@ -1,5 +1,5 @@
-# Sub-Agents Registry
-# Defines which agents to register and in what order
+# Combined Registry
+# Defines which agents and tools to register and in what order
 
 version: "1.0"
 
@@ -18,3 +18,16 @@ agents:
     module: search_agent.sub_agents.verifying.verifying_agent
     enabled: true
     order: 3
+
+tools:
+  - name: time_tool
+    module: search_agent.tools.mcp
+    function: create_mcp_toolset
+    enabled: true
+    order: 1
+  
+  - name: weather_tool
+    module: search_agent.tools.weather_tool
+    function: create_weather_tool
+    enabled: true
+    order: 2

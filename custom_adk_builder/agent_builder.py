@@ -14,7 +14,7 @@ class AgentBuilder:
     """Builder class for constructing agents with sub-agents and tools."""
     
     def __init__(self, model: Any, name: str, description: str, instruction: str,
-                 sub_agents_registry_path: str = None, tools_registry_path: str = None):
+                 registry_path: str = None):
         """Initialize the AgentBuilder.
         
         Args:
@@ -22,15 +22,13 @@ class AgentBuilder:
             name: Name of the agent
             description: Description of the agent
             instruction: Instructions for the agent
-            sub_agents_registry_path: Optional path to sub-agents registry YAML file
-            tools_registry_path: Optional path to tools registry YAML file
+            registry_path: Optional path to registry YAML file containing agents and tools
         """
         self.model = model
         self.name = name
         self.description = description
         self.instruction = instruction
-        self.sub_agents_registry_path = sub_agents_registry_path
-        self.tools_registry_path = tools_registry_path
+        self.registry_path = registry_path
     
     def build(self) -> Agent:
         """Build and return the agent with sub-agents and tools.
@@ -44,14 +42,14 @@ class AgentBuilder:
         try:
             # Build sub-agents if registry path provided
             sub_agents = []
-            if self.sub_agents_registry_path:
-                sub_agents_builder = SubAgentsBuilder(self.sub_agents_registry_path)
+            if self.registry_path:
+                sub_agents_builder = SubAgentsBuilder(self.registry_path)
                 sub_agents = sub_agents_builder.build()
             
             # Build tools if registry path provided
             tools = []
-            if self.tools_registry_path:
-                tools_builder = ToolsBuilder(self.tools_registry_path)
+            if self.registry_path:
+                tools_builder = ToolsBuilder(self.registry_path)
                 tools = tools_builder.build()
             
             # Construct the agent

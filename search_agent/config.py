@@ -86,12 +86,9 @@ class Config:
         return self._get_value("logging", "date_format")
     
     @property
-    def sub_agents_registry_path(self) -> str:
-        return self._get_value("registry", "sub_agents_registry_path")
-    
-    @property
-    def tools_registry_path(self) -> str:
-        return self._get_value("registry", "tools_registry_path")
+    def registry_path(self) -> str:
+        return self._get_value("registry", "registry_path")
+
 
 
 
