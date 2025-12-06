@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import List
 
 from google.adk.agents.llm_agent import Agent
-from search_agent.registry import AgentsRegistry, AgentLoadError, ConfigurationError
+from custom_adk_registry import SubAgentRegistry, AgentLoadError, ConfigurationError
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ def build_sub_agents() -> List[Agent]:
         search_agent_dir = builder_dir.parent
         registry_path = search_agent_dir / "sub_agents_registry.yaml"
         
-        registry = AgentsRegistry(str(registry_path))
+        registry = SubAgentRegistry(str(registry_path))
         sub_agents = registry.load_agents()
         logger.info(f"Loaded {len(sub_agents)} sub-agent(s) from registry")
         

@@ -1,26 +1,45 @@
-"""Main tools registry."""
+"""Tools registry for loading tools from YAML configuration."""
 
 import logging
 from typing import List, Any
 
-from .tool_loader import ToolLoader
-from .exceptions import ToolLoadError
-from .tools_registry_parser import ToolsYAMLParser
+from .loader import ToolLoader
+from ..exceptions import ToolLoadError
+from .parser import ToolYAMLParser
 
 logger = logging.getLogger(__name__)
 
 
-class ToolsRegistry:
-    """Registry for loading tools from YAML configuration."""
+class ToolRegistry:
+    """Registry for loading tools from YAML configuration.
+    
+    This class provides a reusable way to load tools from a YAML configuration file.
+    It handles parsing, validation, and dynamic loading of tool modules.
+    
+    Example:
+        registry = ToolRegistry('path/to/tools_registry.yaml')
+        tools = registry.load_tools()
+    """
     
     def __init__(self, config_path: str):
-        """Initialize the tools registry."""
+        """Initialize the tools registry.
+        
+        Args:
+            config_path: Path to the YAML configuration file
+        """
         self.config_path = config_path
-        self.parser = ToolsYAMLParser(config_path)
+        self.parser = ToolYAMLParser(config_path)
         self.loader = ToolLoader()
     
     def load_tools(self) -> List[Any]:
-        """Load and return enabled tools in configured order."""
+        """Load and return enabled tools in configured order.
+        
+        Returns:
+            List of loaded tools, sorted by order
+            
+        Raises:
+            ToolLoadError: If any tool fails to load
+        """
         config = self.parser.parse()
         tool_configs = config.get('tools', [])
         

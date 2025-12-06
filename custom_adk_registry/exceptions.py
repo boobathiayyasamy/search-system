@@ -1,4 +1,4 @@
-"""Custom exceptions for the agents registry module."""
+"""Custom exceptions for the registry module."""
 
 
 class RegistryError(Exception):

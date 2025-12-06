@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import List, Any
 
-from ..registry import ToolsRegistry
+from custom_adk_registry import ToolRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ def build_tools() -> List[Any]:
         registry_path = Path(__file__).parent.parent / "tools_registry.yaml"
         
         # Load tools from registry
-        tools_registry = ToolsRegistry(str(registry_path))
+        tools_registry = ToolRegistry(str(registry_path))
         tools = tools_registry.load_tools()
         logger.info(f"Loaded {len(tools)} tool(s) from registry")
         

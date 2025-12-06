@@ -1,4 +1,4 @@
-"""Dynamic agent loader."""
+"""Dynamic sub-agent loader."""
 
 import importlib
 import logging
@@ -6,17 +6,29 @@ from typing import Any
 
 from google.adk.agents.llm_agent import Agent
 
-from .exceptions import AgentLoadError, AgentNotFoundError
+from ..exceptions import AgentLoadError, AgentNotFoundError
 
 logger = logging.getLogger(__name__)
 
 
-class AgentLoader:
-    """Dynamically loads agents from Python modules."""
+class SubAgentLoader:
+    """Dynamically loads sub-agents from Python modules."""
     
     @staticmethod
     def load_agent_from_module(module_path: str, agent_name: str) -> Agent:
-        """Dynamically import and return an agent from a module."""
+        """Dynamically import and return an agent from a module.
+        
+        Args:
+            module_path: Full module path (e.g., 'search_agent.sub_agents.wikipedia.wikipedia_agent')
+            agent_name: Name of the agent to load
+            
+        Returns:
+            Agent instance
+            
+        Raises:
+            AgentNotFoundError: If module cannot be imported
+            AgentLoadError: If agent cannot be loaded from module
+        """
         
         try:
             module = importlib.import_module(module_path)
@@ -29,14 +41,26 @@ class AgentLoader:
                 f"Error importing module '{module_path}' for agent '{agent_name}': {e}"
             )
         
-        agent = AgentLoader.discover_agent(module, agent_name, module_path)
+        agent = SubAgentLoader.discover_agent(module, agent_name, module_path)
         logger.info(f"Loaded agent '{agent_name}' from module '{module_path}'")
         
         return agent
     
     @staticmethod
     def discover_agent(module: Any, agent_name: str, module_path: str) -> Agent:
-        """Find and return the agent instance from a module."""
+        """Find and return the agent instance from a module.
+        
+        Args:
+            module: The imported module
+            agent_name: Name of the agent to find
+            module_path: Module path (for error messages)
+            
+        Returns:
+            Agent instance
+            
+        Raises:
+            AgentLoadError: If agent cannot be found or multiple candidates exist
+        """
         if hasattr(module, agent_name):
             candidate = getattr(module, agent_name)
             if isinstance(candidate, Agent):

@@ -1,28 +1,47 @@
-"""Main agents registry."""
+"""Sub-agents registry for loading agents from YAML configuration."""
 
 import logging
 from typing import List
 
 from google.adk.agents.llm_agent import Agent
 
-from .sub_agents_loader import AgentLoader
-from .exceptions import AgentLoadError
-from .sub_agents_registry_parser import YAMLParser
+from .loader import SubAgentLoader
+from ..exceptions import AgentLoadError
+from .parser import SubAgentYAMLParser
 
 logger = logging.getLogger(__name__)
 
 
-class AgentsRegistry:
-    """Registry for loading agents from YAML configuration."""
+class SubAgentRegistry:
+    """Registry for loading sub-agents from YAML configuration.
+    
+    This class provides a reusable way to load sub-agents from a YAML configuration file.
+    It handles parsing, validation, and dynamic loading of agent modules.
+    
+    Example:
+        registry = SubAgentRegistry('path/to/sub_agents_registry.yaml')
+        sub_agents = registry.load_agents()
+    """
     
     def __init__(self, config_path: str):
-        """Initialize the agents registry."""
+        """Initialize the sub-agents registry.
+        
+        Args:
+            config_path: Path to the YAML configuration file
+        """
         self.config_path = config_path
-        self.parser = YAMLParser(config_path)
-        self.loader = AgentLoader()
+        self.parser = SubAgentYAMLParser(config_path)
+        self.loader = SubAgentLoader()
     
     def load_agents(self) -> List[Agent]:
-        """Load and return enabled agents in configured order."""
+        """Load and return enabled agents in configured order.
+        
+        Returns:
+            List of loaded Agent instances, sorted by order
+            
+        Raises:
+            AgentLoadError: If any agent fails to load
+        """
         config = self.parser.parse()
         agent_configs = config.get('agents', [])
         
