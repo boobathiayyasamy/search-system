@@ -7,7 +7,7 @@ from google.adk.agents.llm_agent import Agent
 
 from .agent_loader import AgentLoader
 from .exceptions import AgentLoadError
-from .yaml_parser import YAMLParser
+from .agents_registry_parser import YAMLParser
 
 logger = logging.getLogger(__name__)
 
