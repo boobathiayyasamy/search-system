@@ -1,6 +1,6 @@
 """Registry Module - Dynamic agent and tool loading and management."""
 
-from .agents_registry import AgentsRegistry
+from .sub_agents_registry import AgentsRegistry
 from .tools_registry import ToolsRegistry
 from .exceptions import (
     AgentLoadError,

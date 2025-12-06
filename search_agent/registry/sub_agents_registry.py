@@ -5,9 +5,9 @@ from typing import List
 
 from google.adk.agents.llm_agent import Agent
 
-from .agent_loader import AgentLoader
+from .sub_agents_loader import AgentLoader
 from .exceptions import AgentLoadError
-from .agents_registry_parser import YAMLParser
+from .sub_agents_registry_parser import YAMLParser
 
 logger = logging.getLogger(__name__)
 

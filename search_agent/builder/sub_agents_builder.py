@@ -16,7 +16,7 @@ def build_sub_agents() -> List[Agent]:
     try:
         builder_dir = Path(__file__).parent
         search_agent_dir = builder_dir.parent
-        registry_path = search_agent_dir / "agents_registry.yaml"
+        registry_path = search_agent_dir / "sub_agents_registry.yaml"
         
         registry = AgentsRegistry(str(registry_path))
         sub_agents = registry.load_agents()
