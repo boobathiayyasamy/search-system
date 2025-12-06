@@ -9,3 +9,9 @@ tools:
     function: create_mcp_toolset
     enabled: true
     order: 1
+  
+  - name: weather_tool
+    module: search_agent.tools.weather_tool
+    function: create_weather_tool
+    enabled: true
+    order: 2
