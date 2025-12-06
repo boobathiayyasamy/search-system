@@ -12,8 +12,15 @@ logger = logging.getLogger(__name__)
 def build_tools() -> List[Any]:
     """Build and return the agent tools."""
     try:
-        # Get the path to tools_registry.yaml
-        registry_path = Path(__file__).parent.parent / "tools_registry.yaml"
+        from search_agent.config import get_config
+        
+        config = get_config()
+        builder_dir = Path(__file__).parent
+        search_agent_dir = builder_dir.parent
+        
+        # Get registry path from config and resolve it relative to search_agent directory
+        registry_relative_path = config.tools_registry_path
+        registry_path = search_agent_dir / registry_relative_path
         
         # Load tools from registry
         tools_registry = ToolRegistry(str(registry_path))

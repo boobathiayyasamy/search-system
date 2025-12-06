@@ -21,8 +21,8 @@ def build_sub_agents() -> List[Agent]:
         search_agent_dir = builder_dir.parent
         
         # Get registry path from config and resolve it relative to search_agent directory
-        registry_filename = config.sub_agents_registry_path
-        registry_path = search_agent_dir / registry_filename
+        registry_relative_path = config.sub_agents_registry_path
+        registry_path = search_agent_dir / registry_relative_path
         
         registry = SubAgentRegistry(str(registry_path))
         sub_agents = registry.load_agents()
