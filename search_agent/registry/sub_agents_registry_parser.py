@@ -16,11 +16,15 @@ class YAMLParser:
     
     def __init__(self, config_path: str):
         self.config_path = Path(config_path)
-        if not self.config_path.exists():
-            raise ConfigurationError(f"Configuration file not found: {config_path}")
+        self.file_exists = self.config_path.exists()
+        if not self.file_exists:
+            logger.info(f"Configuration file not found: {config_path}. Sub-agents registration will be skipped.")
     
     def parse(self) -> Dict[str, Any]:
         """Parse and validate the YAML configuration file."""
+        if not self.file_exists:
+            return {'agents': []}
+        
         try:
             with open(self.config_path, 'r') as f:
                 config = yaml.safe_load(f)
