@@ -25,13 +25,17 @@ except Exception as e:
     logger.error("Failed to initialize summarizing agent model: %s", e)
     raise
 
+# Import the french translator function as a tool
+# Note: This import must happen after the config is loaded
+from .sub_agents.french_translator import french_translator_agent
+
 try:
     summarizing_agent = Agent(
         model=summarizing_model,
         name=config.agent_name,
         description=config.agent_description,
         instruction=config.agent_instruction,
-        tools=[],
+        sub_agents=[french_translator_agent]
     )
 except Exception as e:
     logger.error("Failed to initialize summarizing agent: %s", e)
@@ -65,52 +69,5 @@ def summarize_content(content: str) -> Dict[str, str]:
         return {
             "status": "error",
             "error": f"An error occurred while summarizing: {str(e)}"
-        }
-
-
-def regenerate_with_positive_tone(summary: str, original_content: str = "") -> Dict[str, str]:
-    """Regenerate summary with positive or neutral tone."""
-    
-    try:
-        if not summary or not summary.strip():
-            return {
-                "status": "error",
-                "error": "No summary provided to regenerate"
-            }
-        
-        prompt = f"""The following summary has negative sentiment. Please rewrite it to have a POSITIVE or NEUTRAL tone while maintaining factual accuracy.
-
-Original summary:
-{summary}
-"""
-        
-        if original_content:
-            prompt += f"""\nOriginal content for context:
-{original_content[:500]}...
-"""
-        
-        prompt += """
-Requirements:
-1. Rewrite into 3-5 concise bullet points
-2. Use positive or neutral language
-3. Maintain factual accuracy
-4. Keep the same general topics/themes
-5. Avoid negative, critical, or pessimistic phrasing
-
-Provide ONLY the regenerated bullet points, no explanations.
-"""
-        
-        response = summarizing_agent.run(prompt)
-        
-        return {
-            "status": "success",
-            "summary": response.strip()
-        }
-        
-    except Exception as e:
-        logger.error("Error regenerating summary: %s", e)
-        return {
-            "status": "error",
-            "error": f"An error occurred while regenerating: {str(e)}"
         }
 
