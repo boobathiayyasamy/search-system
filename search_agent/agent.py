@@ -15,7 +15,6 @@ from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
 from .tools.mcp import create_mcp_toolset
 from .builder.root_agent_builder import build_root_agent
-from .builder.sub_agents_builder import build_sub_agents
 
 try:
     model = LiteLlm(
@@ -36,7 +35,6 @@ except Exception as e:
 root_agent = build_root_agent(
     model=model,
     config=config,
-    tool=time_tool,
-    sub_agents=build_sub_agents()
+    tool=time_tool
 )
 
