@@ -8,6 +8,12 @@ agents:
     module: search_agent.sub_agents.wikipedia.wikipedia_agent
     enabled: true
     order: 1
+    tools:
+      - name: search_wikipedia
+        module: search_agent.sub_agents.wikipedia.tools.search_wikipedia
+        function: search_wikipedia
+        enabled: true
+        order: 1
     
   - name: summarizing_agent
     module: search_agent.sub_agents.summarizing.summarizing_agent

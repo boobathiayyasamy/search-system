@@ -54,6 +54,15 @@ class SubAgentYAMLParser:
         if not isinstance(config['agents'], list):
             raise ConfigurationError("'agents' must be a list")
         
+        # Extract and validate tools for each agent
+        for agent_config in config['agents']:
+            if 'tools' in agent_config:
+                if not isinstance(agent_config['tools'], list):
+                    raise ConfigurationError(
+                        f"'tools' for agent '{agent_config.get('name', 'unknown')}' must be a list"
+                    )
+                self._validate_agent_tools(agent_config['tools'], agent_config.get('name', 'unknown'))
+        
         self._validate_agents(config['agents'])
         
         return config
@@ -123,3 +132,45 @@ class SubAgentYAMLParser:
                     f"'{order_map[order]}' and '{name}'"
                 )
             order_map[order] = name
+    
+    def _validate_agent_tools(self, tools: list, agent_name: str) -> None:
+        """Validate tools configuration for an agent.
+        
+        Args:
+            tools: List of tool configurations for an agent
+            agent_name: Name of the agent (for error messages)
+            
+        Raises:
+            ConfigurationError: If validation fails
+        """
+        # Check for duplicate tool names
+        seen_names = {}
+        for idx, tool in enumerate(tools):
+            name = tool.get('name')
+            if not name:
+                continue
+            
+            if name in seen_names:
+                raise ConfigurationError(
+                    f"Duplicate tool name '{name}' found in agent '{agent_name}' "
+                    f"at positions {seen_names[name]} and {idx}"
+                )
+            seen_names[name] = idx
+        
+        # Check for duplicate order values among enabled tools
+        enabled_tools = [tool for tool in tools if tool.get('enabled', False)]
+        order_map = {}
+        for tool in enabled_tools:
+            order = tool.get('order')
+            name = tool.get('name', 'unknown')
+            
+            if order is None:
+                continue
+            
+            if order in order_map:
+                raise ConfigurationError(
+                    f"Duplicate order value {order} found for enabled tools in agent '{agent_name}': "
+                    f"'{order_map[order]}' and '{name}'"
+                )
+            order_map[order] = name
+

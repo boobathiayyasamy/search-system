@@ -6,7 +6,6 @@ from google.adk.agents.llm_agent import Agent
 from google.adk.models.lite_llm import LiteLlm
 
 from .config import get_wikipedia_config
-from .tools import search_wikipedia
 
 
 # Set up logging
@@ -33,7 +32,6 @@ try:
         name=wiki_config.agent_name,
         description=wiki_config.agent_description,
         instruction=wiki_config.agent_instruction,
-        tools=[search_wikipedia],
     )
 except Exception as e:
     logger.error("Failed to initialize Wikipedia agent: %s", e)
