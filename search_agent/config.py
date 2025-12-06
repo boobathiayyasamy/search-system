@@ -84,6 +84,11 @@ class Config:
     @property
     def log_date_format(self) -> str:
         return self._get_value("logging", "date_format")
+    
+    @property
+    def sub_agents_registry_path(self) -> str:
+        return self._get_value("registry", "sub_agents_registry_path")
+
 
 
 _config: Optional[Config] = None
