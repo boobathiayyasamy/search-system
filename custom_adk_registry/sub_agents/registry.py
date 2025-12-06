@@ -56,9 +56,10 @@ class SubAgentRegistry:
             agent_name = config['name']
             module_path = config['module']
             tools = config.get('tools', [])  # Extract tools for this agent
+            sub_agents = config.get('sub_agents', [])  # Extract sub_agents for this agent
             
             try:
-                agent = self.loader.load_agent_from_module(module_path, agent_name, tools)
+                agent = self.loader.load_agent_from_module(module_path, agent_name, tools, sub_agents)
                 loaded_agents.append(agent)
             except (AgentLoadError, Exception) as e:
                 error_msg = f"Failed to load agent '{agent_name}' from '{module_path}': {e}"

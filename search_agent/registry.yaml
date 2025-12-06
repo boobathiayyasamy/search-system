@@ -19,6 +19,11 @@ agents:
     module: search_agent.sub_agents.summarizing.summarizing_agent
     enabled: true
     order: 2
+    sub_agents:
+      - name: french_translator_agent
+        module: search_agent.sub_agents.summarizing.sub_agents.french_translator.french_translator_agent
+        enabled: false
+        order: 1
     
   - name: verifying_agent
     module: search_agent.sub_agents.verifying.verifying_agent

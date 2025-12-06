@@ -25,17 +25,14 @@ except Exception as e:
     logger.error("Failed to initialize summarizing agent model: %s", e)
     raise
 
-# Import the french translator function as a tool
-# Note: This import must happen after the config is loaded
-from .sub_agents.french_translator import french_translator_agent
+
 
 try:
     summarizing_agent = Agent(
         model=summarizing_model,
         name=config.agent_name,
         description=config.agent_description,
-        instruction=config.agent_instruction,
-        sub_agents=[french_translator_agent]
+        instruction=config.agent_instruction
     )
 except Exception as e:
     logger.error("Failed to initialize summarizing agent: %s", e)
