@@ -24,11 +24,9 @@ except Exception as e:
     logger.error("Failed to initialize LLM model: %s", e)
     raise
 
-# Resolve registry path relative to search_agent directory
 search_agent_dir = Path(__file__).parent
 registry_path = search_agent_dir / config.registry_path
 
-# Build the agent using AgentBuilder
 agent_builder = AgentBuilder(
     model=model,
     name=config.agent_name,

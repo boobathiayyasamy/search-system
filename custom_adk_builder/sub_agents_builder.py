@@ -1,5 +1,3 @@
-"""Sub-agents Builder - Reusable builder for loading sub-agents from registry."""
-
 import logging
 from typing import List
 
@@ -10,27 +8,12 @@ logger = logging.getLogger(__name__)
 
 
 class SubAgentsBuilder:
-    """Builder class for loading sub-agents from a registry."""
     
     def __init__(self, registry_path: str):
-        """Initialize the SubAgentsBuilder.
-        
-        Args:
-            registry_path: Path to the sub-agents registry YAML file
-        """
         self.registry_path = registry_path
         self._registry = None
     
     def build(self) -> List[Agent]:
-        """Build and return the list of sub-agents from registry.
-        
-        Returns:
-            List of Agent instances loaded from the registry
-            
-        Raises:
-            ConfigurationError: If registry configuration is invalid
-            AgentLoadError: If agents cannot be loaded from registry
-        """
         try:
             self._registry = SubAgentRegistry(self.registry_path)
             sub_agents = self._registry.load_agents()
