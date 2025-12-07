@@ -5,7 +5,7 @@ from YAML configuration files. It can be used by any agent or project that needs
 dynamic agent/tool loading capabilities.
 
 Usage:
-    from custom_adk_registry import SubAgentRegistry, ToolRegistry
+    from dynamic_adk_registry import SubAgentRegistry, ToolRegistry
     
     # Load sub-agents
     sub_agent_registry = SubAgentRegistry('path/to/sub_agents_registry.yaml')

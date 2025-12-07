@@ -12,7 +12,7 @@ logger = setup_logging(config)
 
 from pathlib import Path
 from google.adk.models.lite_llm import LiteLlm
-from custom_adk_builder import AgentBuilder
+from dynamic_adk_builder import AgentBuilder
 
 try:
     model = LiteLlm(

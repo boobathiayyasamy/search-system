@@ -1,7 +1,7 @@
 import logging
 from typing import List, Any
 
-from custom_adk_registry import ToolRegistry
+from dynamic_adk_registry import ToolRegistry
 
 logger = logging.getLogger(__name__)
 

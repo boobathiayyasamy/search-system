@@ -2,7 +2,7 @@ import logging
 from typing import List
 
 from google.adk.agents.llm_agent import Agent
-from custom_adk_registry import SubAgentRegistry, AgentLoadError, ConfigurationError
+from dynamic_adk_registry import SubAgentRegistry, AgentLoadError, ConfigurationError
 
 logger = logging.getLogger(__name__)
 
