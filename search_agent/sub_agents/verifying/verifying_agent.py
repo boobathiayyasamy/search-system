@@ -48,31 +48,37 @@ def analyze_sentiment(summary: str, original_content: str = "") -> Dict[str, str
                 "error": "No summary provided to analyze"
             }
         
-        prompt = f"""Analyze the sentiment of the following summary and classify it as POSITIVE, NEUTRAL, or NEGATIVE.
+        prompt = f"""Analyze the sentiment of the following summary and provide a single sentence response that describes the sentiment.
 
 Summary to analyze:
 {summary}
 
 Instructions:
-- POSITIVE: Content expresses favorable, optimistic, or encouraging views
-- NEUTRAL: Content is factual, balanced, or objective without strong emotional tone
-- NEGATIVE: Content expresses unfavorable, critical, or pessimistic views
+- If POSITIVE: Explain why the content expresses favorable, optimistic, or encouraging views
+- If NEUTRAL: Explain why the content is factual, balanced, or objective without strong emotional tone
+- If NEGATIVE: Explain why the content expresses unfavorable, critical, or pessimistic views
 
-Respond with ONLY ONE WORD: POSITIVE, NEUTRAL, or NEGATIVE
+Provide a single, concise sentence that describes the sentiment of the summary with proper context.
+Example responses:
+- "This summary conveys a positive sentiment as it highlights successful achievements and optimistic outcomes."
+- "The summary maintains a neutral tone by presenting factual information without emotional bias."
+- "This content reflects a negative sentiment due to its focus on challenges and unfavorable circumstances."
+
+Your response:
 """
         
-        response = verifying_agent.run(prompt).strip().upper()
+        response = verifying_agent.run(prompt).strip()
         
+        # Extract sentiment classification from the response
+        response_lower = response.lower()
         sentiment = "neutral"
-        if "POSITIVE" in response:
+        if "positive" in response_lower:
             sentiment = "positive"
-        elif "NEGATIVE" in response:
+        elif "negative" in response_lower:
             sentiment = "negative"
-        elif "NEUTRAL" in response:
-            sentiment = "neutral"
         
-        # Return sentiment analysis for all sentiment types
-        final_content = f"{summary}\n\nSentiment Analysis: {sentiment.upper()}"
+        # Return sentiment analysis with the full sentence response
+        final_content = f"{summary}\n\nSentiment Analysis: {response}"
         return {
             "status": "success",
             "sentiment": sentiment,
