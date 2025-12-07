@@ -1,0 +1,11 @@
+# Core dependencies
+google-adk>=1.19.0
+litellm>=1.80.7
+
+# MCP and tools
+fastmcp>=2.13.3
+wikipedia>=1.4.0
+
+# Configuration and utilities
+python-dotenv>=1.2.1
+pyyaml>=6.0

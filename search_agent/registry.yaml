@@ -22,7 +22,7 @@ agents:
     sub_agents:
       - name: french_translator_agent
         module: search_agent.sub_agents.summarizing.sub_agents.french_translator.french_translator_agent
-        enabled: false
+        enabled: true
         order: 1
     
   - name: verifying_agent
