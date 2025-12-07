@@ -1,7 +1,7 @@
 """Search Agent - A helpful assistant."""
 
 from .config import get_config, ConfigurationError
-from .utils import setup_logging
+from utils import setup_logging
 
 try:
     config = get_config()
