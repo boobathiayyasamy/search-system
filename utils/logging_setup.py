@@ -16,7 +16,7 @@ def setup_logging(config) -> logging.Logger:
     Returns:
         Configured logger instance
     """
-    logs_dir = Path(__file__).parent.parent.parent / "logs"
+    logs_dir = Path(__file__).parent.parent / "logs"
     logs_dir.mkdir(exist_ok=True)
     
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
