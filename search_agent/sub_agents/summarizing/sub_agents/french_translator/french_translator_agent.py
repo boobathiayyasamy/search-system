@@ -31,7 +31,6 @@ try:
         name=config.agent_name,
         description=config.agent_description,
         instruction=config.agent_instruction,
-        tools=[],
     )
 except Exception as e:
     logger.error("Failed to initialize French translator agent: %s", e)
